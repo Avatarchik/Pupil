@@ -4,16 +4,27 @@ using UnityEngine;
 using UnityEngine.XR;
 
 namespace Pupil {
+	[RequireComponent(typeof(PopupWarning))]	
 	public class PupilCameraSettings : MonoBehaviour {
 		private PupilCamera _camera;
 		[SerializeField]
-		private float _minDistanceIPD;
+		private float _left;
 		[SerializeField]
-		private float _minDistance;
+		private float _right;
+		[SerializeField]
+		private float _minDistanceIPD;
 		[SerializeField]
 		private float _maxDistanceIPD;
 		[SerializeField]
 		private float _maxDistance;
+		[SerializeField]
+		private string _red;
+		[SerializeField]
+		private string _blue;
+		[SerializeField]
+		private string _green;
+		[SerializeField]
+		private string _yellow;		
 		[SerializeField]
 		private bool _debug;
 		private bool _cameraSet;
@@ -32,36 +43,31 @@ namespace Pupil {
 		}
 
 		public void SetCamera() {
-			_minDistance = PupilDataHolder.minDistance;
+			_left = PupilDataHolder.left;
+			_right = PupilDataHolder.right;
 			_maxDistance = PupilDataHolder.maxDistance;		
 			_maxDistanceIPD = PupilDataHolder.maxIPD;
 			_minDistanceIPD = PupilDataHolder.minIPD;			
-			
-			_camera = new PupilCamera();		 	
+			_red = PupilDataHolder.red;
+			_blue = PupilDataHolder.blue;
+			_green = PupilDataHolder.green;
+			_yellow = PupilDataHolder.yellow;
 
-			_camera.SetMinDistanceIPD(_minDistance, _minDistanceIPD);
+			_camera = new PupilCamera();		 	
+			
+			_camera.SetMinDistanceIPD(_minDistanceIPD);
 			_camera.SetMaxDistanceIPD(_maxDistance, _maxDistanceIPD);
 			_cameraSet = true;
 		}
 
 		public void SetMinDistanceIPD(float ipd) {
 			PupilDataHolder.minIPD = ipd;			
-			_camera.SetMinDistanceIPD(PupilDataHolder.minDistance, PupilDataHolder.minIPD);			
+			_camera.SetMinDistanceIPD(PupilDataHolder.minIPD);			
 		}
 
 		public void SetMaxDistanceIPD(float ipd) {
 			PupilDataHolder.maxIPD = ipd;
 			_camera.SetMaxDistanceIPD(PupilDataHolder.maxDistance, PupilDataHolder.maxIPD);						
-		}
-
-		public void SetMinDistance() {
-			PupilDataHolder.minDistance = _camera.GetDistanceToGameObject(_camera.FindNearest());			
-			_camera.SetMinDistanceIPD(PupilDataHolder.minDistance, PupilDataHolder.minIPD);
-		}
-
-		public void SetMinDistance(int ignoreLayer) {
-			PupilDataHolder.minDistance = _camera.GetDistanceToGameObject(_camera.FindNearest(ignoreLayer));			
-			_camera.SetMinDistanceIPD(PupilDataHolder.minDistance, PupilDataHolder.minIPD);			
 		}
 
 		public void SetMaxDistance() {
